@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bookup File Upload</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 2em;
+      text-align: center;
+    }
+    input[type="file"] {
+      margin: 1em 0;
+    }
+    button {
+      padding: 0.5em 1em;
+      font-size: 1em;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>Upload Your Book Cover</h1>
+  <form id="uploadForm">
+    <label for="file">Select a .jpg or .png file:</label>
+    <br />
+    <input type="file" id="file" name="file" accept=".jpg, .png" required />
+    <br />
+    <button type="submit">Upload</button>
+  </form>
+
+  <p id="response"></p>
+
+  <script>
+    const form = document.getElementById("uploadForm");
+    const responseField = document.getElementById("response");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const fileInput = document.getElementById("file");
+      const file = fileInput.files[0];
+
+      if (!file) {
+        responseField.textContent = "Please select a file.";
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append("file", file);
+
+      try {
+        const response = await fetch("/", {
+          method: "POST",
+          body: formData,
+        });
+
+        if (response.ok) {
+          const text = await response.text();
+          responseField.textContent = text;
+        } else {
+          const errorText = await response.text();
+          responseField.textContent = `Error: ${errorText}`;
+        }
+      } catch (error) {
+        responseField.textContent = `Upload failed: ${error.message}`;
+      }
+    });
+  </script>
+</body>
+</html>

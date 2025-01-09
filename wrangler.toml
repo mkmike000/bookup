@@ -1,0 +1,8 @@
+name = "bookup"
+main = "worker.js"
+compatibility_date = "2025-01-09"
+
+[[r2_buckets]]
+binding = "bookup_assets_bucket" # This is how the Worker accesses the bucket
+bucket_name = "bookup-assets"    # Your R2 bucket name
+preview_bucket_name = "bookup-assets" # Optional, useful for testing
